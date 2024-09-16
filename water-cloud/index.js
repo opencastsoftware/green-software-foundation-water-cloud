@@ -12,7 +12,7 @@ const WaterCloud = (globalConfig) => {
   };
 
   const execute = async (inputs, config) => {
-    const WATER_AVARAGE = 1.8;
+    const WUE_DEFAULT = 1.8;
 
     var result = [];
     
@@ -21,7 +21,7 @@ const WaterCloud = (globalConfig) => {
       var safeInput = validateInput(inputs[i]);
 
       var energy = safeInput.energy;
-      var cloudWaterConsumption = energy * WATER_AVARAGE;
+      var cloudWaterConsumption = energy * WUE_DEFAULT;
       result[i] = { 
                     ...safeInput, 
                     ["water-cloud"]: cloudWaterConsumption 

@@ -10,7 +10,8 @@ initialize:
         keep-exisiting: true
 tree:
   pipeline:
-    - water-cloud
+    compute:
+      - water-cloud
   config:
     water-cloud:
   inputs:

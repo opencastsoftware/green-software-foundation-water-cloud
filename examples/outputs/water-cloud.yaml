@@ -1,0 +1,52 @@
+name: water-cloud manifest
+description: example impl invoking water cloud plugin
+tags: null
+initialize:
+  plugins:
+    water-cloud:
+      path: water-cloud
+      method: WaterCloud
+      global-config:
+        keep-exisiting: true
+execution:
+  command: >-
+    /opt/homebrew/Cellar/node/22.8.0/bin/node /opt/homebrew/bin/if-run
+    --manifest ./examples/water-cloud.yml --output
+    ./examples/outputs/water-cloud.yml
+  environment:
+    if-version: 0.6.0
+    os: macOS
+    os-version: 14.6.1
+    node-version: 22.8.0
+    date-time: 2024-09-16T11:25:29.344Z (UTC)
+    dependencies: []
+  status: success
+tree:
+  pipeline:
+    compute:
+      - water-cloud
+  config:
+    water-cloud: null
+  inputs:
+    - timestamp: 2024-04-01T00:00
+      duration: 100
+      energy: 10
+    - timestamp: 2024-04-01T00:00
+      duration: 200
+      energy: 20
+    - timestamp: 2024-04-01T00:00
+      duration: 300
+      energy: 30
+  outputs:
+    - timestamp: 2024-04-01T00:00
+      duration: 100
+      energy: 10
+      water-cloud: 18
+    - timestamp: 2024-04-01T00:00
+      duration: 200
+      energy: 20
+      water-cloud: 36
+    - timestamp: 2024-04-01T00:00
+      duration: 300
+      energy: 30
+      water-cloud: 54
