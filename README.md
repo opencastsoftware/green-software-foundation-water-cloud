@@ -24,11 +24,11 @@ const result = waterCloudPlugin.execute(inputs, {});
 console.log(result);
 ```
 
-You can run the belwo example by saving it as `./examples/water-cloud.yml` and executing the following command from the project root:
+You can run the below example by saving it as `./examples/water-cloud.yml` and executing the following command from the project root:
 
 ```sh
 npm link water-cloud
-ie --manifest ./examples/water-cloud.yml --output ./examples/outputs/water-cloud.yml
+if-run --manifest ./examples/water-cloud.yml --output ./examples/outputs/water-cloud.yml
 ```
 
 The results will be saved to a new `yaml` file in `./examples/outputs`
@@ -41,19 +41,14 @@ Not required.
 
 - `energy`: energy used. (kWh)
 
-and:
-
-- `timestamp`: a timestamp for the input
-- `duration`: the amount of time, in seconds, that the input covers.
-
 ## Error Handling
-N/A
+Throws an exception if energy is not a number
 
 ## Plugin Algorithm
 ```pseudocode
-WATER_AVARAGE = 1.8
+WUE_DEFAULT = 1.8
 
-output = energy * WATER_AVARAGE
+output = energy * WUE_DEFAULT
 ```
 
 ## Returns
@@ -63,9 +58,9 @@ output = energy * WATER_AVARAGE
 ## Plugin Algorithm
 
 ```pseudocode
-WATER_AVARAGE = 1.8
+WUE_DEFAULT = 1.8
 
-output = energy * WATER_AVARAGE
+output = energy * WUE_DEFAULT
 ```
 
 ## Example manifest
@@ -83,7 +78,8 @@ initialize:
         keep-exisiting: true
 tree:
   pipeline:
-    - water-cloud
+    compute:
+      - water-cloud
   config:
     water-cloud:
   inputs:
@@ -97,15 +93,53 @@ tree:
       duration: 300
       energy: 30
 ```
+Example output:
 
-You can run this example by saving it as `./examples/water-cloud.yml` and executing the following command from the project root:
-
-```sh
-npm link water-cloud
-ie --manifest ./examples/water-cloud.yml --output ./examples/outputs/water-cloud.yml
+```yaml
+name: water-cloud manifest
+description: example impl invoking water cloud plugin
+tags:
+initialize:
+  plugins:
+    water-cloud:
+      method: WaterCloud
+      path: 'water-cloud'
+      global-config:
+        keep-exisiting: true
+tree:
+  pipeline:
+    compute:
+      - water-cloud
+  config:
+    water-cloud:
+  inputs:
+    - timestamp: 2024-04-01T00:00 
+      duration: 100
+      energy: 10
+    - timestamp: 2024-04-01T00:00 
+      duration: 200
+      energy: 20
+    - timestamp: 2024-04-01T00:00 
+      duration: 300
+      energy: 30
 ```
+Example outputs:
 
-The results will be saved to a new `yaml` file in `./examples/outputs`
+```yaml
+  outputs:
+    - timestamp: 2024-04-01T00:00
+      duration: 100
+      energy: 10
+      water-cloud: 18
+    - timestamp: 2024-04-01T00:00
+      duration: 200
+      energy: 20
+      water-cloud: 36
+    - timestamp: 2024-04-01T00:00
+      duration: 300
+      energy: 30
+      water-cloud: 54
+```
 
 ## License
  
