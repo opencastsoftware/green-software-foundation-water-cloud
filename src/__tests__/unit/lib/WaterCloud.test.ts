@@ -27,5 +27,14 @@ describe('WaterCloud', () => {
       expect(result[0]['water-cloud']).toBe(18);
       expect(result[1]['water-cloud']).toBe(36);
     });
+
+    test('should return valid output when cloud vendor is specified as AWS', async () => {
+      const inputs = [{energy: 10, 'cloud/vendor': 'AWS'},{energy: 20, 'cloud/vendor': 'Azure'}, {energy: 10, 'cloud/vendor': 'GCP'}];
+      const config: ConfigParams = [];
+      const result = await waterCloud.execute(inputs, config);
+      expect(result[0]['water-cloud']).toBe(1.8);
+      expect(result[1]['water-cloud']).toBe(9.8);
+      expect(result[2]['water-cloud']).toBe(11);
+    });
   });
 });

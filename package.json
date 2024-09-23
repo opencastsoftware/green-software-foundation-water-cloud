@@ -1,7 +1,7 @@
 {
   "name": "if-water-cloud",
-  "version": "1.0.0",
   "description": "an impact framework plugin for calculating water use in cloud cooling",
+  "version": "1.0.0",
   "author": {
     "name": "Opencast Software",
     "email": "adam.coles@opencastsoftware.com"
