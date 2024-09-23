@@ -5,15 +5,15 @@ initialize:
   plugins:
     water-cloud:
       method: WaterCloud
-      path: 'water-cloud'
+      path: 'if-water-cloud'
       global-config:
-        keep-exisiting: true
+        default-wue: 1.8
+        input-parameters: ['energy']
+        output-parameter: 'water-cloud'
 tree:
   pipeline:
     compute:
       - water-cloud
-  config:
-    water-cloud:
   inputs:
     - timestamp: 2024-04-01T00:00 
       duration: 100
