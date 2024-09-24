@@ -1,0 +1,28 @@
+name: water-cloud manifest
+description: example impl invoking water cloud plugin
+tags:
+initialize:
+  plugins:
+    water-cloud:
+      method: WaterCloud
+      path: 'if-water-cloud'
+      global-config:
+        input-parameters: ['energy']
+        output-parameter: 'water-cloud'
+tree:
+  pipeline:
+    compute:
+      - water-cloud
+  inputs:
+    - timestamp: 2024-04-01T00:00 
+      duration: 100
+      energy: 10
+      cloud/vendor: AWS
+    - timestamp: 2024-04-01T00:00 
+      duration: 200
+      energy: 20
+      cloud/vendor: GCP
+    - timestamp: 2024-04-01T00:00 
+      duration: 300
+      energy: 30
+      cloud/vendor: Azure

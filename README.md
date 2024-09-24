@@ -3,7 +3,7 @@
 ![MIT License](https://img.shields.io/badge/license-MIT-brightgreen)
 
 ## Overview
-An IF plugin for calculating the water consumption by datacentres which currently uses a defaul WUE of 1.8l/kWh. Upcoming changes will use Datacentre region / Provider published figures before defaulting.
+An IF plugin for calculating the water consumption by datacentres which currently uses a defaul WUE of 1.8l/kWh. Uses published WUE figures for cloud vendors if supplied.
 
 ## Usage
 
@@ -40,9 +40,11 @@ Not required.
 ## Input Parameters
 
 - `energy`: energy used. (kWh)
+- `cloud/vendor`: Name of cloud vendor. Supported values are AWS, Azure, GCP.
 
 ## Error Handling
 Throws an exception if energy is not a number
+Throws an exception if cloud/vendor is supplied but is not a string.
 
 ## Plugin Algorithm
 ```pseudocode
