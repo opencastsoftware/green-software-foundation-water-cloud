@@ -49,13 +49,6 @@ Throws an exception if energy is not a number
 Throws an exception if cloud/vendor is supplied but is not a string.
 Throws an exception if cloud/region is provided but is not a string
 
-## Plugin Algorithm
-```pseudocode
-WUE_DEFAULT = 1.8
-
-output = energy * WUE_DEFAULT
-```
-
 ## Returns
 
 - `water-cloud`: the amount of water used.
