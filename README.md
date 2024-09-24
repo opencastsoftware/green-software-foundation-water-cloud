@@ -3,7 +3,18 @@
 ![MIT License](https://img.shields.io/badge/license-MIT-brightgreen)
 
 ## Overview
-An IF plugin for calculating the water consumption by datacentres which currently uses a defaul WUE of 1.8l/kWh. Uses published WUE figures for cloud vendors if supplied.
+An IF plugin for calculating the water consumption by datacentres which currently uses a defaul WUE of 1.8l/kWh. Uses published WUE figures for cloud vendors if supplied. WUE is calculated as follows (if no region is supplied for Azure then it will default to worldwide figure):
+
+| Provider | Region              | WUE          | Source |
+|----------|---------------------|--------------|---------|
+| -        | -                   | 1.8          |[Datacentredynamics.com](https://www.datacenterdynamics.com/en/opinions/an-industry-in-transition-1-data-center-water-use/)|
+| AWS      | -                   | 0.18         |[AWS Sustainability Report](https://sustainability.aboutamazon.com/2023-report)|
+| Azure    | -                   | 0.49         |[How microsoft measures datacentre water use](https://azure.microsoft.com/en-us/blog/how-microsoft-measures-datacenter-water-and-energy-use-to-improve-azure-cloud-sustainability/)|
+| Azure    | Americas            | 0.55         |[How microsoft measures datacentre water use](https://azure.microsoft.com/en-us/blog/how-microsoft-measures-datacenter-water-and-energy-use-to-improve-azure-cloud-sustainability/)|
+| Azure    | Asia Pacific        | 1.65         |[How microsoft measures datacentre water use](https://azure.microsoft.com/en-us/blog/how-microsoft-measures-datacenter-water-and-energy-use-to-improve-azure-cloud-sustainability/)|
+| Azure    | EMEA                | 0.10         |[How microsoft measures datacentre water use](https://azure.microsoft.com/en-us/blog/how-microsoft-measures-datacenter-water-and-energy-use-to-improve-azure-cloud-sustainability/)|
+| GCP      | -                   | 1.10         |[New Scientist (estimation)](https://www.newscientist.com/article/2354801-google-has-finally-revealed-how-much-water-its-data-centres-use/)|
+
 
 ## Usage
 
@@ -40,11 +51,14 @@ Not required.
 ## Input Parameters
 
 - `energy`: energy used. (kWh)
-- `cloud/vendor`: Name of cloud vendor. Supported values are AWS, Azure, GCP.
+- `cloud/vendor`: (Optional) Name of cloud vendor. Supported values are AWS, Azure, GCP.
+- `cloud/region`: (Optional) Worldwide region. Currently only Azure breaks down WUE by region
+- `wue` : (Optional) If you have your own wue figures this will override any defaults
 
 ## Error Handling
 Throws an exception if energy is not a number
 Throws an exception if cloud/vendor is supplied but is not a string.
+Throws an exception if cloud/region is provided but is not a string
 
 ## Plugin Algorithm
 ```pseudocode

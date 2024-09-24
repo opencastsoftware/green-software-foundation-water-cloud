@@ -1,19 +1,22 @@
 import {ERRORS} from '@grnsft/if-core/utils';
 import {PluginParams, ExecutePlugin} from '@grnsft/if-core/types';
 
-import {ConfigParams} from './types';
+import {ConfigParams, WUEEntry} from './types';
+
+import * as CLOUD_WUE from './cloud-wue.json';
 
 const {InputValidationError} = ERRORS;
 const WUE_DEFAULT = 1.8;
+const wueData: WUEEntry[] = CLOUD_WUE as WUEEntry[];
 
-// published as of 2023
-const awsWUE = 0.18;
+// // published as of 2023
+// const awsWUE = 0.18;
 
-// global average 2022
-const azureWUE = 0.49;
+// // global average 2022
+// const azureWUE = 0.49;
 
-// estimated from totals by New Scientist 2023
-const gcpWUE = 1.1;
+// // estimated from totals by New Scientist 2023
+// const gcpWUE = 1.1;
 
 export const WaterCloud = (globalConfig: ConfigParams): ExecutePlugin => {
   const metadata = {
@@ -59,16 +62,31 @@ export const WaterCloud = (globalConfig: ConfigParams): ExecutePlugin => {
   const wueCalculation = (input: PluginParams): number => {
     const cloudVendor = (input['cloud/vendor'] as string)?.toLowerCase();
 
-    switch (cloudVendor) {
-      case 'aws':
-        return awsWUE;
-      case 'azure':
-        return azureWUE;
-      case 'gcp':
-        return gcpWUE;
-      default:
-        return WUE_DEFAULT;
-    }
+    if (cloudVendor) return getWUE(cloudVendor, input['cloud/region']);
+    else return WUE_DEFAULT;
+  };
+
+  // Function to get WUE by provider and optional region
+  const getWUE = (provider: string, region?: string): number => {
+    // First, try to find the provider-wide (default) WUE
+    const providerDefault = wueData.find(
+      entry =>
+        entry.provider.toLowerCase() === provider.toLowerCase() &&
+        entry.region === null
+    );
+    // Next, try to find the specific region if provided
+    const result = wueData.find(
+      entry =>
+        entry.provider.toLowerCase() === provider.toLowerCase() &&
+        region &&
+        entry.region?.toLowerCase() === region.toLowerCase()
+    );
+    // Return the WUE value if found, otherwise return default WUE
+    return result
+      ? result.WUE
+      : providerDefault
+        ? providerDefault.WUE
+        : WUE_DEFAULT;
   };
 
   return {

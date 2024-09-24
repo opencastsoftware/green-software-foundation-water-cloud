@@ -64,5 +64,23 @@ describe('WaterCloud', () => {
       expect(result[0]['water-cloud']).toBe(5);
       expect(result[1]['water-cloud']).toBe(36);
     });
+
+    test('should return correct data if azure region specified', async () => {
+      const inputs = [
+        {'cloud/vendor': 'Azure', 'cloud/region': 'Asia Pacific', energy: 10},
+      ];
+      const config: ConfigParams = [];
+      const result = await waterCloud.execute(inputs, config);
+      expect(result[0]['water-cloud']).toBe(16.5);
+    });
+
+    test('should return default if cloud provider not in list', async () => {
+      const inputs = [
+        {'cloud/vendor': 'Oracle', 'cloud/region': 'Asia Pacific', energy: 10},
+      ];
+      const config: ConfigParams = [];
+      const result = await waterCloud.execute(inputs, config);
+      expect(result[0]['water-cloud']).toBe(18);
+    });
   });
 });
