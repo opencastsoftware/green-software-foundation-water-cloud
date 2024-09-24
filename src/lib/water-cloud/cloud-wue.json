@@ -1,0 +1,32 @@
+[
+  {
+    "provider": "AWS",
+    "region": null,
+    "WUE": 0.18
+  },
+  {
+    "provider": "Azure",
+    "region": null,
+    "WUE": 0.49
+  },
+  {
+    "provider": "Azure",
+    "region": "Americas",
+    "WUE": 0.55
+  },
+  {
+    "provider": "Azure",
+    "region": "Asia Pacific",
+    "WUE": 1.65
+  },
+  {
+    "provider": "Azure",
+    "region": "EMEA",
+    "WUE": 0.10
+  },
+  {
+    "provider": "GCP",
+    "region": null,
+    "WUE": 1.10
+  }
+]
