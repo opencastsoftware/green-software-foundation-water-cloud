@@ -13,6 +13,22 @@ describe('WaterCloud', () => {
       );
     });
 
+    test('should throw error if input cloud/vendor is invalid', async () => {
+      const inputs = [{energy: 10, 'cloud/vendor': 3}];
+      const config: ConfigParams = [];
+      await expect(waterCloud.execute(inputs, config)).rejects.toThrow(
+        'Cloud vendor must be a string'
+      );
+    });
+
+    test('should throw error if input wue is invalid', async () => {
+      const inputs = [{energy: 10, wue: 'dd'}];
+      const config: ConfigParams = [];
+      await expect(waterCloud.execute(inputs, config)).rejects.toThrow(
+        'Supplied WUE must be numeric'
+      );
+    });
+
     test('should  return valid output if input is valid', async () => {
       const inputs = [{energy: 10}];
       const config: ConfigParams = [];
@@ -39,6 +55,14 @@ describe('WaterCloud', () => {
       expect(result[0]['water-cloud']).toBe(1.8);
       expect(result[1]['water-cloud']).toBe(9.8);
       expect(result[2]['water-cloud']).toBe(11);
+    });
+
+    test('should return use supplied WUE if present', async () => {
+      const inputs = [{wue: 0.5, energy: 10}, {energy: 20}];
+      const config: ConfigParams = [];
+      const result = await waterCloud.execute(inputs, config);
+      expect(result[0]['water-cloud']).toBe(5);
+      expect(result[1]['water-cloud']).toBe(36);
     });
   });
 });

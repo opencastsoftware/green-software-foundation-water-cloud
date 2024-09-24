@@ -22,13 +22,16 @@ export const WaterCloud = (globalConfig: ConfigParams): ExecutePlugin => {
 
   const validateInput = (input: PluginParams) => {
     const errors: string[] = [];
-    const {energy, 'cloud/vendor': cloudVendor} = input;
+    const {energy, 'cloud/vendor': cloudVendor, wue} = input;
 
     if (typeof energy !== 'number') {
       errors.push('Energy must be numeric');
     }
     if (cloudVendor && typeof cloudVendor !== 'string') {
       errors.push('Cloud vendor must be a string');
+    }
+    if (wue && typeof wue !== 'number') {
+      errors.push('Supplied WUE must be numeric');
     }
 
     if (errors.length > 0) {
@@ -43,8 +46,8 @@ export const WaterCloud = (globalConfig: ConfigParams): ExecutePlugin => {
       globalConfig;
       const safeInput = validateInput(input);
       const energy = safeInput['energy'];
-      const waterCloudConsumption =
-        Math.round(energy * wueCalculation(safeInput) * 100) / 100;
+      const derivedWUE: number = safeInput['wue'] ?? wueCalculation(safeInput);
+      const waterCloudConsumption = Math.round(energy * derivedWUE * 100) / 100;
 
       return {
         ...input,
