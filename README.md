@@ -3,18 +3,7 @@
 ![MIT License](https://img.shields.io/badge/license-MIT-brightgreen)
 
 ## Overview
-An IF plugin for calculating the water consumption by datacentres which currently uses a defaul WUE of 1.8l/kWh. Uses published WUE figures for cloud vendors if supplied. WUE is calculated as follows (if no region is supplied for Azure then it will default to worldwide figure):
-
-| Provider | Region              | WUE          | Source |
-|----------|---------------------|--------------|---------|
-| -        | -                   | 1.8          |[Datacentredynamics.com](https://www.datacenterdynamics.com/en/opinions/an-industry-in-transition-1-data-center-water-use/)|
-| AWS      | -                   | 0.18         |[AWS Sustainability Report](https://sustainability.aboutamazon.com/2023-report)|
-| Azure    | -                   | 0.49         |[How microsoft measures datacentre water use](https://azure.microsoft.com/en-us/blog/how-microsoft-measures-datacenter-water-and-energy-use-to-improve-azure-cloud-sustainability/)|
-| Azure    | Americas            | 0.55         |[How microsoft measures datacentre water use](https://azure.microsoft.com/en-us/blog/how-microsoft-measures-datacenter-water-and-energy-use-to-improve-azure-cloud-sustainability/)|
-| Azure    | Asia Pacific        | 1.65         |[How microsoft measures datacentre water use](https://azure.microsoft.com/en-us/blog/how-microsoft-measures-datacenter-water-and-energy-use-to-improve-azure-cloud-sustainability/)|
-| Azure    | EMEA                | 0.10         |[How microsoft measures datacentre water use](https://azure.microsoft.com/en-us/blog/how-microsoft-measures-datacenter-water-and-energy-use-to-improve-azure-cloud-sustainability/)|
-| GCP      | -                   | 1.10         |[New Scientist (estimation)](https://www.newscientist.com/article/2354801-google-has-finally-revealed-how-much-water-its-data-centres-use/)|
-
+An IF plugin for calculating the water consumption by datacentres which currently uses a defaul WUE of 1.8l/kWh. Uses published WUE figures for cloud vendors if supplied.
 
 ## Usage
 
@@ -73,11 +62,19 @@ output = energy * WUE_DEFAULT
 
 ## Plugin Algorithm
 
-```pseudocode
-WUE_DEFAULT = 1.8
+ WUE is calculated as follows (if no region is supplied for Azure then it will default to worldwide figure):
 
-output = energy * WUE_DEFAULT
-```
+| Provider | Region              | WUE          | Source |
+|----------|---------------------|--------------|---------|
+| -        | -                   | 1.8          |[Datacentredynamics.com](https://www.datacenterdynamics.com/en/opinions/an-industry-in-transition-1-data-center-water-use/)|
+| AWS      | -                   | 0.18         |[AWS Sustainability Report](https://sustainability.aboutamazon.com/2023-report)|
+| Azure    | -                   | 0.49         |[How microsoft measures datacentre water use](https://azure.microsoft.com/en-us/blog/how-microsoft-measures-datacenter-water-and-energy-use-to-improve-azure-cloud-sustainability/)|
+| Azure    | Americas            | 0.55         |[How microsoft measures datacentre water use](https://azure.microsoft.com/en-us/blog/how-microsoft-measures-datacenter-water-and-energy-use-to-improve-azure-cloud-sustainability/)|
+| Azure    | Asia Pacific        | 1.65         |[How microsoft measures datacentre water use](https://azure.microsoft.com/en-us/blog/how-microsoft-measures-datacenter-water-and-energy-use-to-improve-azure-cloud-sustainability/)|
+| Azure    | EMEA                | 0.10         |[How microsoft measures datacentre water use](https://azure.microsoft.com/en-us/blog/how-microsoft-measures-datacenter-water-and-energy-use-to-improve-azure-cloud-sustainability/)|
+| GCP      | -                   | 1.10         |[New Scientist (estimation)](https://www.newscientist.com/article/2354801-google-has-finally-revealed-how-much-water-its-data-centres-use/)|
+
+You can override this behaviour by providing your own WUE figure (for instance for your own datacentre or private cloud provider). If no figure is supplied and vendor/region are not matched then the plugin will fall back to the 1.8l/kWh average estimated for US datacentres.
 
 ## Example manifest
 
@@ -89,7 +86,7 @@ initialize:
   plugins:
     water-cloud:
       method: WaterCloud
-      path: 'water-cloud'
+      path: 'if-water-cloud'
       global-config:
         keep-exisiting: true
 tree:
@@ -105,40 +102,15 @@ tree:
     - timestamp: 2024-04-01T00:00 
       duration: 200
       energy: 20
+      wue: 1.2
     - timestamp: 2024-04-01T00:00 
       duration: 300
       energy: 30
-```
-Example output:
+      cloud/vendor: Azure
+      cloud/region: Asia Pacific
 
-```yaml
-name: water-cloud manifest
-description: example impl invoking water cloud plugin
-tags:
-initialize:
-  plugins:
-    water-cloud:
-      method: WaterCloud
-      path: 'water-cloud'
-      global-config:
-        keep-exisiting: true
-tree:
-  pipeline:
-    compute:
-      - water-cloud
-  config:
-    water-cloud:
-  inputs:
-    - timestamp: 2024-04-01T00:00 
-      duration: 100
-      energy: 10
-    - timestamp: 2024-04-01T00:00 
-      duration: 200
-      energy: 20
-    - timestamp: 2024-04-01T00:00 
-      duration: 300
-      energy: 30
 ```
+
 Example outputs:
 
 ```yaml
@@ -157,7 +129,7 @@ Example outputs:
       water-cloud: 54
 ```
 
-## License
+## Licence
  
 The MIT License (MIT)
 
